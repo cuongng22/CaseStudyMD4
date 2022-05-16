@@ -14,4 +14,7 @@ public class SignUpForm {
 
     private PasswordForm passwordForm;
 
+    public SignUpForm(PasswordForm passwordForm) {
+        this.passwordForm = passwordForm;
+    }
 }

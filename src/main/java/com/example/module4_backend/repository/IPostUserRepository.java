@@ -18,4 +18,10 @@ public interface IPostUserRepository extends JpaRepository<PostUser, Long> {
 
     @Query(value = "select * from post_user where user_info_id = ?1 order by id desc", nativeQuery = true)
     List<PostUser> showAllPostUserByUserInfoId(Long userInfoId);
+
+    @Query(value = "select * from post_user where user_info_id = ?1 and status_id = ?2 order by date_creater desc", nativeQuery = true)
+    List<PostUser> findByStatusandUserInfoId(Long userInfoId, Long statusId);
+
+    @Query(value = "select * from post_user where post_user.user_info_id in (select from_user_info_id from friend_ship where to_user_info_id = ?1)order by date_creater desc ", nativeQuery = true)
+    List<PostUser> findAllPostFriend(Long id);
 }

@@ -2,7 +2,9 @@ package com.example.module4_backend.controller;
 
 import com.example.module4_backend.model.dto.AvatarForm;
 import com.example.module4_backend.model.dto.BackgroundForm;
+import com.example.module4_backend.model.entity.User;
 import com.example.module4_backend.model.entity.UserInfo;
+import com.example.module4_backend.service.user.IUserService;
 import com.example.module4_backend.service.userInfo.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,9 @@ import java.util.List;
 public class UserInfoController {
     @Autowired
     private IUserInfoService userInfoService;
+
+    @Autowired
+    private IUserService userService;
 
     @Value("${file-upload}")
     private String uploadPath;
@@ -87,5 +92,16 @@ public class UserInfoController {
             }
         }
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @PostMapping("/edit/{userId}")
+    public ResponseEntity<UserInfo> edit(@PathVariable Long userId, @ModelAttribute UserInfo userInfo) {
+        User user = userService.findById(userId).get();
+        UserInfo userInfo1 = userInfoService.findByUserId(userId).get();
+        UserInfo newUserInfo = new UserInfo(userInfo1.getId(), userInfo.getName(), userInfo.getAge(), userInfo.getSex(), userInfo.getAddress(), user );
+        newUserInfo.setAvatar(userInfo1.getAvatar());
+        newUserInfo.setBackground(userInfo1.getBackground());
+        userInfoService.save(newUserInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

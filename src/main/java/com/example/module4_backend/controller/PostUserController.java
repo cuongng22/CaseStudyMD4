@@ -87,18 +87,63 @@ public class PostUserController {
                 userInfo.get()
         );
         postUserService.save(postUser);
-        for (int  i = 0 ; i < multipartFiles.length; i++) {
-            images.add(multipartFiles[i].getOriginalFilename());
-        }
-        for (int i = 0; i <images.size(); i++) {
-            iImageUserService.save(new ImagePostUser(images.get(i), postUser));
-            try {
-                FileCopyUtils.copy(multipartFiles[i].getBytes(), new File(uploadPath + images.get(i)));
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (multipartFiles != null) {
+            for (int  i = 0 ; i < multipartFiles.length; i++) {
+                images.add(multipartFiles[i].getOriginalFilename());
+            }
+            for (int i = 0; i <images.size(); i++) {
+                iImageUserService.save(new ImagePostUser(images.get(i), postUser));
+                try {
+                    FileCopyUtils.copy(multipartFiles[i].getBytes(), new File(uploadPath + images.get(i)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
         return new ResponseEntity<>(postUser , HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{userId}")
+    public ResponseEntity<List<PostUserFrontEnd>> findByNameAndStatus(@PathVariable Long userId) {
+        UserInfo userInfo = userInfoService.findByUserId(userId).get();
+        List<PostUser> postUsers = postUserService.findByStatusandUserInfoId(userInfo.getId(), 1L);
+        List<PostUserFrontEnd> postUserFrontEnds  = new ArrayList<>();
+        for (int  i = 0 ; i< postUsers.size(); i++) {
+            postUserFrontEnds.add(new PostUserFrontEnd(postUsers.get(i).getId(),
+                    postUsers.get(i).getContent(),
+                    postUsers.get(i).getDateCreater(),
+                    iImageUserService.listImage(postUsers.get(i).getId()),
+                    postUsers.get(i).getStatus(),
+                    userInfo,
+                    likePostUserService.totalLikeByPost(postUsers.get(i).getId()).size(),
+                    commentPostUserService.showAllByPost(postUsers.get(i).getId()),
+                    commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(),
+                    likeCmtPostUserService.listLikeComments(postUsers.get(i).getId()).size()
+            ));
+        }
+        return new ResponseEntity<>(postUserFrontEnds, HttpStatus.OK);
+    }
+
+    @GetMapping("/friends/{id}")
+    public ResponseEntity<List<PostUserFrontEnd>> showALlByfr(@PathVariable Long id) {
+        UserInfo userInfo = userInfoService.findByUserId(id).get();
+        List<PostUser> postUsers = postUserService.findAllPostFriend(userInfo.getId());
+        List<PostUserFrontEnd> postUserFrontEnds  = new ArrayList<>();
+        for (int  i = 0 ; i< postUsers.size(); i++) {
+            postUserFrontEnds.add(new PostUserFrontEnd(postUsers.get(i).getId(),
+                    postUsers.get(i).getContent(),
+                    postUsers.get(i).getDateCreater(),
+                    iImageUserService.listImage(postUsers.get(i).getId()),
+                    postUsers.get(i).getStatus(),
+                    postUsers.get(i).getUserInfo(),
+                    likePostUserService.totalLikeByPost(postUsers.get(i).getId()).size(),
+                    commentPostUserService.showAllByPost(postUsers.get(i).getId()),
+                    commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(),
+                    likeCmtPostUserService.listLikeComments(postUsers.get(i).getId()).size()
+            ));
+        }
+        return new ResponseEntity<>(postUserFrontEnds, HttpStatus.OK);
     }
 
 }

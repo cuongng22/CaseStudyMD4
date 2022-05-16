@@ -13,10 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,4 +57,13 @@ public class AuthController {
         User user1 = new User(user.getUsername(), user.getPasswordForm().getPassword());
         return new ResponseEntity<>(userService.save(user1), HttpStatus.CREATED);
     }
+
+    @PostMapping("/password/{userId}")
+    public ResponseEntity<User> editpass(@RequestBody SignUpForm user, @PathVariable Long userId) {
+        User u = userService.findById(userId).get();
+        if (!user.getPasswordForm().getPassword().equals(user.getPasswordForm().getConfirmPassword())) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    User user1 = new User(userId, u.getUsername(), user.getPasswordForm().getPassword());
+        return new ResponseEntity<>(userService.save(user1), HttpStatus.CREATED);    }
 }

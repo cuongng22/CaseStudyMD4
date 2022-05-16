@@ -46,6 +46,15 @@ public class UserInfo {
         this.avatar = avatar;
         this.user = user;
     }
+
+    public UserInfo(Long id, String name, int age, String sex, String address, User user) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.address = address;
+        this.user = user;
+    }
 }
 
 

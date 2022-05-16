@@ -15,4 +15,9 @@ public class PostUserForm {
     private StatusPostUser status;
 
     private MultipartFile[] image;
+
+    public PostUserForm(String content, StatusPostUser status) {
+        this.content = content;
+        this.status = status;
+    }
 }

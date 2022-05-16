@@ -47,4 +47,19 @@ public class PostUserService implements IPostUserService{
     public List<PostUser> showAllPostUserByUserInfoId(Long userInfoId) {
         return postUserRepository.showAllPostUserByUserInfoId(userInfoId);
     }
+
+    @Override
+    public List<PostUser> findAllPostInHome(Long userInfoId) {
+        return null;
+    }
+
+    @Override
+    public List<PostUser> findByStatusandUserInfoId(Long userInfoId, Long statusId) {
+        return postUserRepository.findByStatusandUserInfoId(userInfoId, statusId);
+    }
+
+    @Override
+    public List<PostUser> findAllPostFriend(Long id) {
+        return postUserRepository.findAllPostFriend(id);
+    }
 }

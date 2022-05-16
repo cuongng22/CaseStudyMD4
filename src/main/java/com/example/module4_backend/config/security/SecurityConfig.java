@@ -63,7 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/image/**",
                         "/login",
-                        "/register"
+                        "/register",
+                        "/password/**"
                        ).permitAll()
                 .antMatchers("/userInfo/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
