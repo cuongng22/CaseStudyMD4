@@ -33,9 +33,9 @@ public class PostUserFrontEnd {
 
     private Integer totalComment;
 
-    private Integer totalLikeComment;
+    private List<Integer> totalLikeComment;
 
-    public PostUserFrontEnd(String content, Date dateCreater, ImagePostUser[] image, StatusPostUser statusPostUser, UserInfo userInfo, Integer totalLike, List<CommentPostUser> commentPostUsers, Integer totalComment, Integer totalLikeComment) {
+    public PostUserFrontEnd(String content, Date dateCreater, ImagePostUser[] image, StatusPostUser statusPostUser, UserInfo userInfo, Integer totalLike, List<CommentPostUser> commentPostUsers, Integer totalComment, List<Integer> totalLikeComment) {
         this.content = content;
         this.dateCreater = dateCreater;
         this.image = image;

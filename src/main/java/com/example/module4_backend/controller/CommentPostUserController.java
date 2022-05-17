@@ -1,9 +1,11 @@
 package com.example.module4_backend.controller;
 
 import com.example.module4_backend.model.entity.CommentPostUser;
+import com.example.module4_backend.model.entity.NotificationUser;
 import com.example.module4_backend.model.entity.PostUser;
 import com.example.module4_backend.model.entity.UserInfo;
 import com.example.module4_backend.service.comment_postUser.ICommentPostUserService;
+import com.example.module4_backend.service.notificationUser.INotificationUserService;
 import com.example.module4_backend.service.post_user.IPostUserService;
 import com.example.module4_backend.service.userInfo.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class CommentPostUserController {
     private ICommentPostUserService commentPostUserService;
 
     @Autowired
+    private INotificationUserService notificationUserService;
+    @Autowired
     private IUserInfoService userInfoService;
 
     @Autowired
@@ -35,9 +39,15 @@ public class CommentPostUserController {
                 commentPostUser.getContent(),
                 date,
                 postUser,
-                userInfo);
+                userInfo
+        );
+        NotificationUser notificationUser = new NotificationUser(
+                userInfo.getName() + " đã bình luận bài viết của bạn ",
+                new Date(),
+                userInfo,postUser.getUserInfo()
+        );
+        notificationUserService.save(notificationUser);
                 commentPostUserService.save(newCommentPostUser);
         return new ResponseEntity<>(newCommentPostUser, HttpStatus.OK);
     }
-
 }

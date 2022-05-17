@@ -15,4 +15,5 @@ public interface ILikeCommentRepository extends JpaRepository<LikeCommentPostUse
 
     @Query(value = "select * from like_comment_post_user where comment_post_user_id = ?1", nativeQuery = true)
     List<LikeCommentPostUser> listLikeComments(Long cmPostUserId);
+
 }

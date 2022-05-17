@@ -2,8 +2,13 @@ package com.example.module4_backend.controller;
 
 import com.example.module4_backend.model.dto.AvatarForm;
 import com.example.module4_backend.model.dto.BackgroundForm;
+import com.example.module4_backend.model.entity.ImagePostUser;
+import com.example.module4_backend.model.entity.PostUser;
 import com.example.module4_backend.model.entity.User;
 import com.example.module4_backend.model.entity.UserInfo;
+import com.example.module4_backend.service.image_postuser.IImageUserService;
+import com.example.module4_backend.service.post_user.IPostUserService;
+import com.example.module4_backend.service.status_postUser.IStatusPostUserService;
 import com.example.module4_backend.service.user.IUserService;
 import com.example.module4_backend.service.userInfo.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -26,10 +32,17 @@ import java.util.List;
 @RequestMapping("/userInfo")
 public class UserInfoController {
     @Autowired
+    private IPostUserService postUserService;
+    @Autowired
+    private IImageUserService iImageUserService;
+    @Autowired
     private IUserInfoService userInfoService;
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IStatusPostUserService statusPostUserService;
 
     @Value("${file-upload}")
     private String uploadPath;
@@ -63,7 +76,16 @@ public class UserInfoController {
         }
         UserInfo userInfo = userInfoService.findById(userInfoId).get();
         userInfo.setAvatar(avatar);
+        PostUser postUser= new PostUser(
+                userInfo.getName() + " đã thay đổi ảnh đại diện",
+                new Date(),
+                statusPostUserService.findById(2L).get(),
+                userInfo
+        );
+        postUserService.save(postUser);
+        iImageUserService.save(new ImagePostUser(avatar,postUser ));
         userInfoService.save(userInfo);
+
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
@@ -79,6 +101,14 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findById(userInfoId).get();
         userInfo.setBackground(bgr);
         userInfoService.save(userInfo);
+        PostUser postUser= new PostUser(
+                userInfo.getName() + " đã thay đổi ảnh bìa",
+                new Date(),
+                statusPostUserService.findById(2L).get(),
+                userInfo
+        );
+        postUserService.save(postUser);
+        iImageUserService.save(new ImagePostUser(bgr,postUser ));
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 

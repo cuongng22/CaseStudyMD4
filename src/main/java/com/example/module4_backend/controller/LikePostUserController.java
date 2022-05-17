@@ -1,9 +1,11 @@
 package com.example.module4_backend.controller;
 
 import com.example.module4_backend.model.entity.LikePostUser;
+import com.example.module4_backend.model.entity.NotificationUser;
 import com.example.module4_backend.model.entity.PostUser;
 import com.example.module4_backend.model.entity.UserInfo;
 import com.example.module4_backend.service.like_postUser.ILikePostUserService;
+import com.example.module4_backend.service.notificationUser.INotificationUserService;
 import com.example.module4_backend.service.post_user.IPostUserService;
 import com.example.module4_backend.service.userInfo.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,9 @@ public class LikePostUserController {
 
     @Autowired
     private IUserInfoService userInfoService;
+
+    @Autowired
+    private INotificationUserService notificationUserService;
 
     @Autowired
     private IPostUserService postUserService;
@@ -41,6 +47,12 @@ public class LikePostUserController {
         if (!likePostUser.isPresent()) {
             LikePostUser newLikePostUser = new LikePostUser(true, postUser, userInfo);
             likePostUserService.save(newLikePostUser);
+            NotificationUser notificationUser = new NotificationUser(
+                    userInfo.getName() + " đã thích bài viết của bạn",
+                    new Date(),
+                    userInfo,postUser.getUserInfo()
+            );
+            notificationUserService.save(notificationUser);
             return new ResponseEntity<>(newLikePostUser,HttpStatus.NOT_FOUND);
         } else {
             likePostUserService.deleteById(likePostUser.get().getId());

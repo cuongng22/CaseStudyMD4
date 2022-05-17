@@ -1,4 +1,4 @@
-package com.example.module4_backend.service.group_member;
+package com.example.module4_backend.service.groupmember;
 
 import com.example.module4_backend.model.entity.GroupMember;
 import com.example.module4_backend.repository.IGroupMemberRepository;
@@ -11,12 +11,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class GroupMemberSerivce implements IGroupMemberSerivce{
+public class GroupMemberService implements IGroupMemberService {
     @Autowired
     private IGroupMemberRepository groupMemberRepository;
+
+
     @Override
     public Page<GroupMember> findALl(Pageable pageable) {
         return groupMemberRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<GroupMember> findAll() {
+        return groupMemberRepository.findAll();
     }
 
     @Override
@@ -35,17 +42,11 @@ public class GroupMemberSerivce implements IGroupMemberSerivce{
     }
 
     @Override
-    public List<GroupMember> findAll() {
-        return groupMemberRepository.findAll();
+    public Page<GroupMember> findAllByGroup1Id(Long group1Id ,Pageable pageable) {
+        return groupMemberRepository.findAllByGroup1Id(group1Id , pageable);
     }
-
-    @Override
-    public List<GroupMember> findByGroup(Long id) {
-        return groupMemberRepository.findByGroup(id);
-    }
-
-    @Override
-    public GroupMember findByUserInfoIdAndGroupId(Long userInfoId, Long groupId) {
-        return groupMemberRepository.findByUserInfoIdAndGroupId(userInfoId, groupId);
-    }
+//    @Override
+//    public Page<SearchByName> findByNameUser(String fullName, Pageable pageable) {
+//        return groupMemberRepository.findByNameUser(fullName , pageable );
+//    }
 }

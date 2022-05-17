@@ -1,43 +1,66 @@
 package com.example.module4_backend.model.entity;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "group_members")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Table(name = "groupmembers")
 public class GroupMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToMany
-    private List<Group> groups;
-
+    private Boolean status;
     @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group1 group1;
+    @ManyToOne
+    @JoinColumn(name = "userinfo_id")
     private UserInfo userInfo;
 
-    private int status;
+    public GroupMember() {
+    }
 
-    public GroupMember(List<Group> groups, UserInfo userInfo) {
-        this.groups = groups;
+    public GroupMember(Long id, Boolean status, Group1 group1, UserInfo userInfo) {
+        this.id = id;
+        this.status = status;
+        this.group1 = group1;
         this.userInfo = userInfo;
     }
 
-    public GroupMember(List<Group> groups, UserInfo userInfo, int status) {
-        this.groups = groups;
+    public GroupMember(Boolean status, Group1 group1, UserInfo userInfo) {
+        this.status = status;
+        this.group1 = group1;
         this.userInfo = userInfo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    public GroupMember(UserInfo userInfo, int status) {
+    public Group1 getGroup1() {
+        return group1;
+    }
+
+    public void setGroup1(Group1 group1) {
+        this.group1 = group1;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-        this.status = status;
     }
 }

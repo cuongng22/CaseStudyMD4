@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface INotificationFriendRepository extends JpaRepository<NotificationUser,Long> {
-    @Query(value = "select * from notification_user where to_user_id = ?1", nativeQuery = true)
+    @Query(value = "select * from notification_user where to_user_id = ?1 order by date_created ", nativeQuery = true)
     List<NotificationUser> showALl(Long id);
 }

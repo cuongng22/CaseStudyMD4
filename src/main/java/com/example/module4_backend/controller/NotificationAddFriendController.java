@@ -22,9 +22,10 @@ public class NotificationAddFriendController {
     @Autowired
     private IUserInfoService userInfoService;
 
-    @GetMapping("/{userInfoId}")
-    public ResponseEntity<List<NotificationUser>> showAllNotification(@PathVariable Long userInfoId) {
-        List<NotificationUser> list = notificationUserService.showALl(userInfoId);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<NotificationUser>> showAllNotification(@PathVariable Long userId) {
+        UserInfo userInfo1 = userInfoService.findByUserId(userId).get();
+        List<NotificationUser> list = notificationUserService.showALl(userInfo1.getId());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

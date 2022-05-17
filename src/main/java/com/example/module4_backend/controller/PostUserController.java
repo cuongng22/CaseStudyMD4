@@ -59,6 +59,10 @@ public class PostUserController {
         List<PostUser> postUsers = postUserService.showAllPostUserByUserInfoId(userInfo.getId());
         List<PostUserFrontEnd> postUserFrontEnds  = new ArrayList<>();
         for (int  i = 0 ; i< postUsers.size(); i++) {
+            List<Integer> totalLike = new ArrayList<>();
+            for (int j = 0; j < commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(); j ++) {
+                totalLike.add(likeCmtPostUserService.listLikeComments(commentPostUserService.showAllByPost(postUsers.get(i).getId()).get(j).getId()).size());
+            }
             postUserFrontEnds.add(new PostUserFrontEnd(postUsers.get(i).getId(),
                     postUsers.get(i).getContent(),
                     postUsers.get(i).getDateCreater(),
@@ -68,8 +72,8 @@ public class PostUserController {
                     likePostUserService.totalLikeByPost(postUsers.get(i).getId()).size(),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(),
-                    likeCmtPostUserService.listLikeComments(postUsers.get(i).getId()).size()
-                    ));
+                    totalLike
+            ));
         }
         return new ResponseEntity<>(postUserFrontEnds, HttpStatus.OK);
     }
@@ -110,6 +114,10 @@ public class PostUserController {
         List<PostUser> postUsers = postUserService.findByStatusandUserInfoId(userInfo.getId(), 1L);
         List<PostUserFrontEnd> postUserFrontEnds  = new ArrayList<>();
         for (int  i = 0 ; i< postUsers.size(); i++) {
+            List<Integer> totalLike = new ArrayList<>();
+            for (int j = 0; j < commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(); j ++) {
+                totalLike.add(likeCmtPostUserService.listLikeComments(commentPostUserService.showAllByPost(postUsers.get(i).getId()).get(j).getId()).size());
+            }
             postUserFrontEnds.add(new PostUserFrontEnd(postUsers.get(i).getId(),
                     postUsers.get(i).getContent(),
                     postUsers.get(i).getDateCreater(),
@@ -119,7 +127,7 @@ public class PostUserController {
                     likePostUserService.totalLikeByPost(postUsers.get(i).getId()).size(),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(),
-                    likeCmtPostUserService.listLikeComments(postUsers.get(i).getId()).size()
+                   totalLike
             ));
         }
         return new ResponseEntity<>(postUserFrontEnds, HttpStatus.OK);
@@ -131,6 +139,10 @@ public class PostUserController {
         List<PostUser> postUsers = postUserService.findAllPostFriend(userInfo.getId());
         List<PostUserFrontEnd> postUserFrontEnds  = new ArrayList<>();
         for (int  i = 0 ; i< postUsers.size(); i++) {
+            List<Integer> totalLike = new ArrayList<>();
+            for (int j = 0; j < commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(); j ++) {
+                totalLike.add(likeCmtPostUserService.listLikeComments(commentPostUserService.showAllByPost(postUsers.get(i).getId()).get(j).getId()).size());
+            }
             postUserFrontEnds.add(new PostUserFrontEnd(postUsers.get(i).getId(),
                     postUsers.get(i).getContent(),
                     postUsers.get(i).getDateCreater(),
@@ -140,7 +152,7 @@ public class PostUserController {
                     likePostUserService.totalLikeByPost(postUsers.get(i).getId()).size(),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()),
                     commentPostUserService.showAllByPost(postUsers.get(i).getId()).size(),
-                    likeCmtPostUserService.listLikeComments(postUsers.get(i).getId()).size()
+                    totalLike
             ));
         }
         return new ResponseEntity<>(postUserFrontEnds, HttpStatus.OK);
